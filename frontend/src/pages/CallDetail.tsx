@@ -1,16 +1,21 @@
-import { Link, useParams } from 'react-router-dom';
-import { useCall, useTranscribeCall, useAnalyzeCall, useAudioUrl } from '../lib/queries';
+import { useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useCall, useTranscribeCall, useAnalyzeCall, useAudioUrl, useDeleteCall } from '../lib/queries';
 import { useAuthor } from '../lib/author';
 import { Button, Card, Empty, ErrorMsg, Spinner } from '../components/ui';
 import { SentimentBadge, TranscriptStatusBadge } from '../components/badges';
+import { ConfirmModal } from '../components/ConfirmModal';
 
 export function CallDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { author } = useAuthor();
   const q = useCall(id);
   const transcribe = useTranscribeCall();
   const analyze = useAnalyzeCall();
+  const del = useDeleteCall();
   const audioUrl = useAudioUrl(id, q.data?.call.audio_path ?? null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   if (q.isLoading) return <div className="flex items-center gap-2 text-slate-400"><Spinner /> Carregando...</div>;
   if (q.isError) return <ErrorMsg>{(q.error as Error).message}</ErrorMsg>;
@@ -18,6 +23,16 @@ export function CallDetail() {
 
   const { call, analysis } = q.data;
   const canAnalyze = call.transcript_status === 'transcribed' && !!call.transcript;
+
+  async function handleDelete() {
+    if (!author || !id) return;
+    try {
+      await del.mutateAsync({ id, authorName: author });
+      navigate(`/projects/${call.project_id}`);
+    } catch {
+      /* erro em del.error */
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -32,7 +47,15 @@ export function CallDetail() {
               {new Date(call.call_date).toLocaleString('pt-BR')} · por {call.author_name ?? '—'}
             </p>
           </div>
-          <TranscriptStatusBadge status={call.transcript_status} />
+          <div className="flex items-center gap-2">
+            <TranscriptStatusBadge status={call.transcript_status} />
+            <Button variant="secondary" onClick={() => navigate(`/calls/${id}/edit`)}>
+              ✎ Editar
+            </Button>
+            <Button variant="ghost" onClick={() => setConfirmOpen(true)} className="text-red-400 hover:bg-red-950/40">
+              🗑 Excluir
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -191,6 +214,24 @@ export function CallDetail() {
           </div>
         )}
       </Card>
+
+      <ConfirmModal
+        open={confirmOpen}
+        title="Excluir esta call?"
+        message={
+          <>
+            <p>
+              Vai apagar a call <strong className="text-slate-200">{call.title || '(sem título)'}</strong>, o áudio (se houver),
+              a transcrição e <strong>todas as análises</strong>. Sem desfazer.
+            </p>
+            {del.isError && <p className="mt-3 text-red-400">{(del.error as Error).message}</p>}
+          </>
+        }
+        confirmLabel="Excluir call"
+        loading={del.isPending}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   );
 }

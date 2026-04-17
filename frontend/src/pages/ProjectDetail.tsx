@@ -1,19 +1,35 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useProject } from '../lib/queries';
+import { useProject, useDeleteProject } from '../lib/queries';
+import { useAuthor } from '../lib/author';
 import { Button, Card, Empty, ErrorMsg, Spinner } from '../components/ui';
-import { ProjectStatusBadge, TranscriptStatusBadge } from '../components/badges';
+import { ProjectStatusBadge, SentimentBadge, TranscriptStatusBadge } from '../components/badges';
+import { ConfirmModal } from '../components/ConfirmModal';
+import { CollapsibleMarkdown } from '../components/Markdown';
 
 export function ProjectDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { author } = useAuthor();
   const q = useProject(id);
+  const del = useDeleteProject();
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   if (q.isLoading) return <div className="flex items-center gap-2 text-slate-400"><Spinner /> Carregando...</div>;
   if (q.isError) return <ErrorMsg>{(q.error as Error).message}</ErrorMsg>;
-  if (!q.data) return null;
+  if (!q.data || !id) return null;
 
   const { project, calls } = q.data;
+
+  async function handleDelete() {
+    if (!author || !id) return;
+    try {
+      await del.mutateAsync({ id, authorName: author });
+      navigate('/');
+    } catch {
+      /* erro em del.error */
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -24,14 +40,36 @@ export function ProjectDetail() {
             <h1 className="text-2xl font-semibold text-slate-100">{project.name}</h1>
             <p className="text-slate-400">{project.client_name}</p>
           </div>
-          <ProjectStatusBadge status={project.status} />
+          <div className="flex items-center gap-2">
+            {project.current_sentiment && (
+              <div className="flex flex-col items-end gap-0.5">
+                <SentimentBadge sentiment={project.current_sentiment} />
+                {project.last_analyzed_at && (
+                  <span className="text-[10px] text-slate-500">
+                    {new Date(project.last_analyzed_at).toLocaleDateString('pt-BR')}
+                  </span>
+                )}
+              </div>
+            )}
+            <ProjectStatusBadge status={project.status} />
+            <Button variant="secondary" onClick={() => navigate(`/projects/${project.id}/edit`)}>
+              ✎ Editar
+            </Button>
+            <Button variant="ghost" onClick={() => setConfirmOpen(true)} className="text-red-400 hover:bg-red-950/40">
+              🗑 Excluir
+            </Button>
+          </div>
         </div>
       </div>
 
       <Card>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Informações</h2>
         <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
-          {project.description && <Info label="Descrição" full>{project.description}</Info>}
+          {project.description && (
+            <Info label="Descrição" full>
+              <CollapsibleMarkdown>{project.description}</CollapsibleMarkdown>
+            </Info>
+          )}
           {project.start_date && <Info label="Início">{new Date(project.start_date).toLocaleDateString('pt-BR')}</Info>}
           {project.planned_posts_count != null && <Info label="Posts planejados">{project.planned_posts_count}</Info>}
           {project.team?.manager && <Info label="Manager">{project.team.manager}</Info>}
@@ -120,6 +158,24 @@ export function ProjectDetail() {
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        open={confirmOpen}
+        title="Excluir projeto?"
+        message={
+          <>
+            <p>
+              Vai apagar <strong className="text-slate-200">{project.name}</strong> e <strong>todas as {calls.length} call{calls.length === 1 ? '' : 's'}</strong>{' '}
+              (com áudios, transcrições e análises). Sem desfazer.
+            </p>
+            {del.isError && <p className="mt-3 text-red-400">{(del.error as Error).message}</p>}
+          </>
+        }
+        confirmLabel="Excluir tudo"
+        loading={del.isPending}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   );
 }

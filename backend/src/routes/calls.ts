@@ -123,6 +123,46 @@ callsRouter.get('/calls/:id', asyncHandler(async (req, res) => {
   res.json({ call, analysis: analyses?.[0] ?? null });
 }));
 
+const callUpdateSchema = z.object({
+  title: z.string().nullable().optional(),
+  call_date: z.string().optional(),
+  participants: z.array(z.object({
+    name: z.string(),
+    role: z.string().optional(),
+    email: z.string().optional(),
+  })).optional(),
+  transcript: z.string().nullable().optional(),
+});
+
+callsRouter.patch('/calls/:id', requireAuthor, asyncHandler(async (req, res) => {
+  const input = callUpdateSchema.parse(req.body);
+  const { data, error } = await supabase
+    .from('calls')
+    .update(input)
+    .eq('id', req.params.id)
+    .select()
+    .single();
+  if (error) {
+    if (error.code === 'PGRST116') throw new HttpError(404, 'Call não encontrada');
+    throw new HttpError(500, error.message);
+  }
+  res.json({ call: data });
+}));
+
+callsRouter.delete('/calls/:id', requireAuthor, asyncHandler(async (req, res) => {
+  // Pega audio_path antes de deletar pra apagar o arquivo do Storage
+  const { data: call } = await supabase
+    .from('calls').select('audio_path').eq('id', req.params.id).single();
+
+  const { error } = await supabase.from('calls').delete().eq('id', req.params.id);
+  if (error) throw new HttpError(500, error.message);
+
+  if (call?.audio_path) {
+    await supabase.storage.from('call-audio').remove([call.audio_path]);
+  }
+  res.status(204).end();
+}));
+
 callsRouter.post('/calls/:id/transcribe', asyncHandler(async (req, res) => {
   const transcript = await transcribeAudio(req.params.id);
   res.json({ transcript });

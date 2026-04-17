@@ -18,6 +18,8 @@ export interface Project {
   reference_links: Array<{ label: string; url: string }>;
   start_date: string | null;
   status: 'active' | 'paused' | 'completed' | 'archived';
+  current_sentiment: 'positive' | 'neutral' | 'negative' | null;
+  last_analyzed_at: string | null;
   author_name: string | null;
   created_at: string;
   updated_at: string;

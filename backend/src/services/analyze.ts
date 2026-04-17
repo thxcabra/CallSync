@@ -81,6 +81,10 @@ function buildPrompt(args: {
     .map((l: any) => `- ${l.label}: ${l.url}`)
     .join('\n') || '(nenhum)';
 
+  const docsStr = (project.campaign_docs || [])
+    .map((d: any) => `- ${d.name}${d.type ? ` (${d.type})` : ''}${d.url ? ` — ${d.url}` : ''}`)
+    .join('\n') || '(nenhum)';
+
   const historyStr = previousAnalyses.length
     ? previousAnalyses.map((a, i) =>
         `### Call anterior ${i + 1} (${a.call_date})\nSentimento: ${a.sentiment ?? 'N/A'}\nResumo: ${a.summary ?? '(sem resumo)'}`
@@ -106,8 +110,11 @@ ${teamLines}
 **Pontos de contato:**
 ${contactsStr}
 
-**Links de referência:**
+**Links de referência (você não consegue abrir, use só como contexto do que existe):**
 ${linksStr}
+
+**Documentos de campanha (você não consegue abrir, mas saiba que existem):**
+${docsStr}
 
 # Histórico — calls anteriores deste projeto
 ${historyStr}

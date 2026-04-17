@@ -9,6 +9,7 @@
     "test:notion": "node scripts/test-notion.mjs",
     "test:schema": "node scripts/test-schema.mjs",
     "test:schema-0002": "node scripts/test-schema-0002.mjs",
+    "test:schema-0003": "node scripts/test-schema-0003.mjs",
     "test:backend": "node scripts/test-backend.mjs",
     "test:all": "npm run test:gemini && npm run test:supabase && npm run test:notion && npm run test:schema && npm run test:schema-0002"
   },

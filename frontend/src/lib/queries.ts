@@ -33,6 +33,27 @@ export function useCreateProject() {
   });
 }
 
+export function useUpdateProject() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { id: string; input: Record<string, unknown>; authorName: string }) =>
+      api<{ project: Project }>('PATCH', `/projects/${args.id}`, { body: args.input, authorName: args.authorName }),
+    onSuccess: (_, args) => {
+      qc.invalidateQueries({ queryKey: ['projects'] });
+      qc.invalidateQueries({ queryKey: ['project', args.id] });
+    },
+  });
+}
+
+export function useDeleteProject() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { id: string; authorName: string }) =>
+      api<null>('DELETE', `/projects/${args.id}`, { authorName: args.authorName }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }),
+  });
+}
+
 export function useCall(id: string | undefined) {
   return useQuery({
     queryKey: ['call', id],
@@ -51,6 +72,29 @@ export function useCreateCall() {
       }),
     onSuccess: (_, args) => {
       qc.invalidateQueries({ queryKey: ['project', args.projectId] });
+    },
+  });
+}
+
+export function useUpdateCall() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { id: string; input: Record<string, unknown>; authorName: string }) =>
+      api<{ call: Call }>('PATCH', `/calls/${args.id}`, { body: args.input, authorName: args.authorName }),
+    onSuccess: (_, args) => {
+      qc.invalidateQueries({ queryKey: ['call', args.id] });
+      qc.invalidateQueries({ queryKey: ['project'] });
+    },
+  });
+}
+
+export function useDeleteCall() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { id: string; authorName: string }) =>
+      api<null>('DELETE', `/calls/${args.id}`, { authorName: args.authorName }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['project'] });
     },
   });
 }
