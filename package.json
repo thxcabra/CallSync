@@ -1,0 +1,21 @@
+{
+  "name": "callsync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:gemini": "node scripts/test-gemini.mjs",
+    "test:supabase": "node scripts/test-supabase.mjs",
+    "test:notion": "node scripts/test-notion.mjs",
+    "test:schema": "node scripts/test-schema.mjs",
+    "test:schema-0002": "node scripts/test-schema-0002.mjs",
+    "test:backend": "node scripts/test-backend.mjs",
+    "test:all": "npm run test:gemini && npm run test:supabase && npm run test:notion && npm run test:schema && npm run test:schema-0002"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "@notionhq/client": "^2.2.15",
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5"
+  }
+}
