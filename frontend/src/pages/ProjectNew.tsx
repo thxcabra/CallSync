@@ -20,7 +20,7 @@ export function ProjectNew() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold text-slate-100">Novo projeto</h1>
+      <h1 className="mb-6 text-2xl font-semibold text-white" style={{ fontFamily: "'Clash Grotesk', sans-serif" }}>Novo projeto</h1>
       <ProjectForm
         submitLabel="Criar projeto"
         loading={create.isPending}

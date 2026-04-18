@@ -131,7 +131,7 @@ export function ProjectForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
-        <h2 className="mb-4 text-base font-semibold text-slate-200">Básico</h2>
+        <h2 className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)]">Básico</h2>
         <div className="space-y-4">
           <Field label="Nome do projeto" required>
             <Input value={form.name} onChange={(e) => update('name', e.target.value)} required />
@@ -167,7 +167,7 @@ export function ProjectForm({
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-base font-semibold text-slate-200">Equipe</h2>
+        <h2 className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)]">Equipe</h2>
         <div className="space-y-4">
           <Field label="Manager">
             <Input value={form.team_manager} onChange={(e) => update('team_manager', e.target.value)} placeholder="Ana" />
@@ -182,14 +182,14 @@ export function ProjectForm({
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-base font-semibold text-slate-200">Contatos do cliente</h2>
+        <h2 className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)]">Contatos do cliente</h2>
         <DynamicList
           items={form.contacts}
           onChange={(v) => update('contacts', v)}
           newItem={() => ({ name: '', email: '', phone: '', role: '' })}
           addLabel="+ Adicionar contato"
           render={(item, u, remove) => (
-            <div className="grid grid-cols-1 gap-3 rounded-md border border-slate-800 p-3 sm:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] p-3 sm:grid-cols-4">
               <Input placeholder="Nome" value={item.name} onChange={(e) => u({ name: e.target.value })} />
               <Input placeholder="Email" type="email" value={item.email} onChange={(e) => u({ email: e.target.value })} />
               <Input placeholder="Telefone" value={item.phone} onChange={(e) => u({ phone: e.target.value })} />
@@ -203,7 +203,7 @@ export function ProjectForm({
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-base font-semibold text-slate-200">Links de referência</h2>
+        <h2 className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)]">Links de referência</h2>
         <DynamicList
           items={form.reference_links}
           onChange={(v) => update('reference_links', v)}
@@ -220,7 +220,7 @@ export function ProjectForm({
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-base font-semibold text-slate-200">Documentos de campanha</h2>
+        <h2 className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)]">Documentos de campanha</h2>
         <DynamicList
           items={form.campaign_docs}
           onChange={(v) => update('campaign_docs', v)}

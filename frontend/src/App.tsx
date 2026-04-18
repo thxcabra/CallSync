@@ -13,7 +13,7 @@ export default function App() {
   return (
     <AuthorProvider>
       <Header />
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-6xl px-4 py-8 min-h-[calc(100vh-56px)]">
         <Routes>
           <Route path="/" element={<ProjectsList />} />
           <Route path="/projects/new" element={<ProjectNew />} />

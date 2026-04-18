@@ -7,6 +7,7 @@ import { asyncHandler, HttpError } from '../lib/errors.js';
 import { requireAuthor } from '../middleware/author.js';
 import { transcribeAudio } from '../services/transcribe.js';
 import { analyzeCall } from '../services/analyze.js';
+import { getNotionPreview, syncToNotion } from '../services/notion.js';
 
 export const callsRouter = Router();
 
@@ -171,6 +172,20 @@ callsRouter.post('/calls/:id/transcribe', asyncHandler(async (req, res) => {
 callsRouter.post('/calls/:id/analyze', requireAuthor, asyncHandler(async (req, res) => {
   const analysis = await analyzeCall(req.params.id, { authorName: req.authorName });
   res.json({ analysis });
+}));
+
+callsRouter.get('/calls/:id/notion-preview', asyncHandler(async (req, res) => {
+  const preview = await getNotionPreview(req.params.id);
+  res.json({ preview });
+}));
+
+
+callsRouter.post('/calls/:id/sync-notion', requireAuthor, asyncHandler(async (req, res) => {
+  const { items } = z.object({
+    items: z.union([z.literal('all'), z.array(z.string()).min(1)]),
+  }).parse(req.body);
+  const result = await syncToNotion(req.params.id, items, req.authorName);
+  res.json(result);
 }));
 
 callsRouter.get('/calls/:id/audio-url', asyncHandler(async (req, res) => {

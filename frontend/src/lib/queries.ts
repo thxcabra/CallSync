@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './api';
-import type { TeamMember, Project, Call, CallAnalysis } from './types';
+import type { TeamMember, Project, Call, CallAnalysis, NotionPreview } from './types';
 
 export function useTeamMembers() {
   return useQuery({
@@ -114,6 +114,33 @@ export function useAnalyzeCall() {
     mutationFn: (args: { callId: string; authorName: string }) =>
       api<{ analysis: CallAnalysis }>('POST', `/calls/${args.callId}/analyze`, { authorName: args.authorName }),
     onSuccess: (_, args) => qc.invalidateQueries({ queryKey: ['call', args.callId] }),
+  });
+}
+
+export function useNotionPreview(callId: string | undefined, enabled: boolean) {
+  return useQuery({
+    queryKey: ['notion-preview', callId],
+    queryFn: () =>
+      api<{ preview: NotionPreview }>('GET', `/calls/${callId}/notion-preview`).then(
+        (r) => r.preview
+      ),
+    enabled: !!callId && enabled,
+    staleTime: 0,
+  });
+}
+
+export function useSyncToNotion() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { callId: string; items: string[] | 'all'; authorName: string }) =>
+      api<{ results: Array<{ item: string; notion_id?: string; error?: string }>; partial: boolean; synced_count: number }>(
+        'POST',
+        `/calls/${args.callId}/sync-notion`,
+        { body: { items: args.items }, authorName: args.authorName }
+      ),
+    onSuccess: (_, args) => {
+      qc.invalidateQueries({ queryKey: ['notion-preview', args.callId] });
+    },
   });
 }
 

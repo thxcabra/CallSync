@@ -9,14 +9,14 @@ export const projectsRouter = Router();
 const projectInputSchema = z.object({
   name: z.string().min(1),
   client_name: z.string().min(1),
-  description: z.string().optional(),
+  description: z.string().nullish(),
   campaign_docs: z.array(z.object({
     name: z.string(),
-    url: z.string().optional(),
-    storage_path: z.string().optional(),
-    type: z.string().optional(),
+    url: z.string().nullish(),
+    storage_path: z.string().nullish(),
+    type: z.string().nullish(),
   })).optional(),
-  planned_posts_count: z.number().int().nonnegative().optional(),
+  planned_posts_count: z.number().int().nonnegative().nullish(),
   team: z.object({
     manager: z.string().optional(),
     analysts: z.array(z.string()).optional(),
@@ -24,15 +24,15 @@ const projectInputSchema = z.object({
   }).optional(),
   contacts: z.array(z.object({
     name: z.string(),
-    email: z.string().optional(),
-    phone: z.string().optional(),
-    role: z.string().optional(),
+    email: z.string().nullish(),
+    phone: z.string().nullish(),
+    role: z.string().nullish(),
   })).optional(),
   reference_links: z.array(z.object({
     label: z.string(),
     url: z.string(),
   })).optional(),
-  start_date: z.string().optional(),
+  start_date: z.string().nullish(),
   status: z.enum(['active', 'paused', 'completed', 'archived']).optional(),
 });
 

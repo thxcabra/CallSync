@@ -46,16 +46,16 @@ export function CallNew() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-semibold text-slate-100">Nova call</h1>
+      <h1 className="mb-1 text-2xl font-semibold text-white" style={{ fontFamily: "'Clash Grotesk', sans-serif" }}>Nova call</h1>
       {project.data && (
-        <p className="mb-6 text-sm text-slate-400">
+        <p className="mb-6 text-sm text-[rgba(255,255,255,0.45)]">
           {project.data.project.name} · {project.data.project.client_name}
         </p>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
-          <h2 className="mb-4 text-base font-semibold text-slate-200">Metadata</h2>
+          <h2 className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)]">Metadata</h2>
           <div className="space-y-4">
             <Field label="Título (opcional)">
               <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex: Kickoff, Review semanal..." />
@@ -82,16 +82,19 @@ export function CallNew() {
         </Card>
 
         <Card>
-          <h2 className="mb-4 text-base font-semibold text-slate-200">Conteúdo da call</h2>
-          <div className="mb-4 inline-flex rounded-md border border-slate-700 p-1">
+          <h2 className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)]">Conteúdo da call</h2>
+          <div className="mb-5 inline-flex rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] p-1 gap-1">
             {(['audio', 'manual'] as const).map((m) => (
               <button
                 key={m}
                 type="button"
                 onClick={() => setMode(m)}
-                className={`rounded px-3 py-1.5 text-sm transition-colors ${
-                  mode === m ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'
-                }`}
+                className="rounded-lg px-4 py-2 text-sm transition-all duration-150"
+                style={{
+                  background: mode === m ? '#2A60FB' : 'transparent',
+                  color: mode === m ? '#fff' : 'rgba(255,255,255,0.45)',
+                  boxShadow: mode === m ? '0 0 16px rgba(42,96,251,0.4)' : 'none',
+                }}
               >
                 {m === 'audio' ? '🎙 Tenho o áudio' : '📝 Tenho a transcrição'}
               </button>
@@ -104,7 +107,7 @@ export function CallNew() {
                 type="file"
                 accept="audio/*,.mp3,.wav,.m4a,.mp4,.webm"
                 onChange={(e) => setAudioFile(e.target.files?.[0] ?? null)}
-                className="block w-full text-sm text-slate-300 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-indigo-500"
+                className="block w-full text-sm text-[rgba(255,255,255,0.6)] file:mr-4 file:rounded-lg file:border-0 file:bg-[#2A60FB] file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-[#3b6efc] file:cursor-pointer"
                 required={mode === 'audio'}
               />
               {audioFile && (

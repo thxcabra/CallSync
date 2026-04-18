@@ -15,7 +15,12 @@ export function ProjectDetail() {
   const del = useDeleteProject();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  if (q.isLoading) return <div className="flex items-center gap-2 text-slate-400"><Spinner /> Carregando...</div>;
+  if (q.isLoading)
+    return (
+      <div className="flex items-center gap-2 text-[rgba(255,255,255,0.4)] py-12">
+        <Spinner /> Carregando...
+      </div>
+    );
   if (q.isError) return <ErrorMsg>{(q.error as Error).message}</ErrorMsg>;
   if (!q.data || !id) return null;
 
@@ -32,46 +37,79 @@ export function ProjectDetail() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
+      {/* Breadcrumb */}
       <div>
-        <Link to="/" className="text-sm text-indigo-400 hover:underline">← Projetos</Link>
-        <div className="mt-2 flex items-start justify-between gap-4">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-sm text-[rgba(255,255,255,0.4)] hover:text-[#2A60FB] transition-colors"
+        >
+          <svg viewBox="0 0 16 16" fill="currentColor" className="h-3.5 w-3.5" aria-hidden>
+            <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          </svg>
+          Projetos
+        </Link>
+      </div>
+
+      {/* Project Header */}
+      <div className="rounded-xl border border-[rgba(255,255,255,0.07)] bg-[#0D1230] p-6 relative overflow-hidden">
+        {/* Decorative wave bg */}
+        <svg viewBox="0 0 305 183" fill="white" className="absolute -right-8 -top-4 h-40 w-auto opacity-[0.035] pointer-events-none" aria-hidden>
+          <path d="M123.2,150.6v-71.4c0-9.8-11.8-14.7-18.8-7.8L12.3,163.5c-6.9,6.9-2,18.8,7.8,18.8h272.7c6.1,0,11.1-5,11.1-11.1V23.2c0-9.9-11.9-14.8-18.9-7.8l-143,143c-6.9,6.9-18.8,2-18.8-7.8Z" />
+        </svg>
+
+        <div className="relative flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-semibold text-slate-100">{project.name}</h1>
-            <p className="text-slate-400">{project.client_name}</p>
+            <h1
+              className="text-2xl font-semibold text-white"
+              style={{ fontFamily: "'Clash Grotesk', sans-serif" }}
+            >
+              {project.name}
+            </h1>
+            {project.client_name !== project.name && (
+              <p className="text-[rgba(255,255,255,0.5)] mt-1">{project.client_name}</p>
+            )}
+            <div className="mt-3 flex items-center gap-2 flex-wrap">
+              <ProjectStatusBadge status={project.status} />
+              {project.current_sentiment && <SentimentBadge sentiment={project.current_sentiment} />}
+              {project.last_analyzed_at && (
+                <span className="text-[11px] text-[rgba(255,255,255,0.3)]">
+                  última análise {new Date(project.last_analyzed_at).toLocaleDateString('pt-BR')}
+                </span>
+              )}
+            </div>
           </div>
           <div className="flex items-center gap-2">
-            {project.current_sentiment && (
-              <div className="flex flex-col items-end gap-0.5">
-                <SentimentBadge sentiment={project.current_sentiment} />
-                {project.last_analyzed_at && (
-                  <span className="text-[10px] text-slate-500">
-                    {new Date(project.last_analyzed_at).toLocaleDateString('pt-BR')}
-                  </span>
-                )}
-              </div>
-            )}
-            <ProjectStatusBadge status={project.status} />
             <Button variant="secondary" onClick={() => navigate(`/projects/${project.id}/edit`)}>
               ✎ Editar
             </Button>
-            <Button variant="ghost" onClick={() => setConfirmOpen(true)} className="text-red-400 hover:bg-red-950/40">
-              🗑 Excluir
+            <Button variant="danger" onClick={() => setConfirmOpen(true)}>
+              Excluir
             </Button>
           </div>
         </div>
       </div>
 
+      {/* Info Card */}
       <Card>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">Informações</h2>
+        <p
+          className="mb-4 text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.3)]"
+          style={{ fontFamily: "'Sora', sans-serif" }}
+        >
+          Informações
+        </p>
         <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
           {project.description && (
             <Info label="Descrição" full>
               <CollapsibleMarkdown>{project.description}</CollapsibleMarkdown>
             </Info>
           )}
-          {project.start_date && <Info label="Início">{new Date(project.start_date).toLocaleDateString('pt-BR')}</Info>}
-          {project.planned_posts_count != null && <Info label="Posts planejados">{project.planned_posts_count}</Info>}
+          {project.start_date && (
+            <Info label="Início">{new Date(project.start_date).toLocaleDateString('pt-BR')}</Info>
+          )}
+          {project.planned_posts_count != null && (
+            <Info label="Posts planejados">{project.planned_posts_count}</Info>
+          )}
           {project.team?.manager && <Info label="Manager">{project.team.manager}</Info>}
           {project.team?.analysts && project.team.analysts.length > 0 && (
             <Info label="Analistas">{project.team.analysts.join(', ')}</Info>
@@ -81,13 +119,13 @@ export function ProjectDetail() {
           )}
           {project.contacts?.length > 0 && (
             <Info label="Contatos" full>
-              <ul className="space-y-1">
+              <ul className="space-y-1.5">
                 {project.contacts.map((c, i) => (
-                  <li key={i}>
-                    <span className="text-slate-100">{c.name}</span>
-                    {c.role && <span className="text-slate-500"> ({c.role})</span>}
-                    {c.email && <span className="text-slate-500"> · {c.email}</span>}
-                    {c.phone && <span className="text-slate-500"> · {c.phone}</span>}
+                  <li key={i} className="flex flex-wrap gap-1.5 text-sm">
+                    <span className="text-white font-medium">{c.name}</span>
+                    {c.role && <span className="text-[rgba(255,255,255,0.4)]">{c.role}</span>}
+                    {c.email && <span className="text-[rgba(255,255,255,0.4)]">{c.email}</span>}
+                    {c.phone && <span className="text-[rgba(255,255,255,0.4)]">{c.phone}</span>}
                   </li>
                 ))}
               </ul>
@@ -98,8 +136,13 @@ export function ProjectDetail() {
               <ul className="space-y-1">
                 {project.reference_links.map((l, i) => (
                   <li key={i}>
-                    <a href={l.url} target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">
-                      {l.label}
+                    <a
+                      href={l.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[#2A60FB] hover:underline text-sm"
+                    >
+                      ↗ {l.label}
                     </a>
                   </li>
                 ))}
@@ -112,27 +155,34 @@ export function ProjectDetail() {
                 {project.campaign_docs.map((d, i) => (
                   <li key={i}>
                     {d.url ? (
-                      <a href={d.url} target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">
-                        {d.name}
+                      <a href={d.url} target="_blank" rel="noreferrer" className="text-[#2A60FB] hover:underline text-sm">
+                        ↗ {d.name}
                       </a>
                     ) : (
-                      <span className="text-slate-100">{d.name}</span>
+                      <span className="text-white text-sm">{d.name}</span>
                     )}
-                    {d.type && <span className="text-slate-500"> · {d.type}</span>}
+                    {d.type && <span className="text-[rgba(255,255,255,0.4)] text-xs ml-2">{d.type}</span>}
                   </li>
                 ))}
               </ul>
             </Info>
           )}
         </dl>
-        <p className="mt-4 text-xs text-slate-600">
+        <p className="mt-5 border-t border-[rgba(255,255,255,0.06)] pt-4 text-[11px] text-[rgba(255,255,255,0.25)]">
           Criado por {project.author_name ?? '—'} em {new Date(project.created_at).toLocaleString('pt-BR')}
         </p>
       </Card>
 
+      {/* Calls Section */}
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-100">Calls ({calls.length})</h2>
+          <h2
+            className="text-lg font-semibold text-white"
+            style={{ fontFamily: "'Clash Grotesk', sans-serif" }}
+          >
+            Calls{' '}
+            <span className="text-sm font-normal text-[rgba(255,255,255,0.35)]">({calls.length})</span>
+          </h2>
           <Button onClick={() => navigate(`/projects/${project.id}/calls/new`)}>+ Nova call</Button>
         </div>
 
@@ -141,18 +191,31 @@ export function ProjectDetail() {
         ) : (
           <div className="space-y-2">
             {calls.map((c) => (
-              <Link key={c.id} to={`/calls/${c.id}`} className="block">
-                <Card className="transition-colors hover:border-indigo-700">
+              <Link key={c.id} to={`/calls/${c.id}`} className="block group">
+                <div
+                  className="rounded-xl border border-[rgba(255,255,255,0.07)] bg-[#0D1230] px-5 py-4 transition-all duration-200"
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(42,96,251,0.35)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.07)';
+                  }}
+                >
                   <div className="flex items-center justify-between gap-4">
                     <div className="min-w-0 flex-1">
-                      <p className="font-medium text-slate-100">{c.title || '(sem título)'}</p>
-                      <p className="text-xs text-slate-500">
+                      <p
+                        className="font-medium text-white"
+                        style={{ fontFamily: "'Clash Grotesk', sans-serif" }}
+                      >
+                        {c.title || '(sem título)'}
+                      </p>
+                      <p className="text-xs text-[rgba(255,255,255,0.35)] mt-0.5">
                         {new Date(c.call_date).toLocaleString('pt-BR')} · por {c.author_name ?? '—'}
                       </p>
                     </div>
                     <TranscriptStatusBadge status={c.transcript_status} />
                   </div>
-                </Card>
+                </div>
               </Link>
             ))}
           </div>
@@ -165,7 +228,8 @@ export function ProjectDetail() {
         message={
           <>
             <p>
-              Vai apagar <strong className="text-slate-200">{project.name}</strong> e <strong>todas as {calls.length} call{calls.length === 1 ? '' : 's'}</strong>{' '}
+              Vai apagar <strong className="text-white">{project.name}</strong> e{' '}
+              <strong>todas as {calls.length} call{calls.length === 1 ? '' : 's'}</strong>{' '}
               (com áudios, transcrições e análises). Sem desfazer.
             </p>
             {del.isError && <p className="mt-3 text-red-400">{(del.error as Error).message}</p>}
@@ -183,8 +247,8 @@ export function ProjectDetail() {
 function Info({ label, children, full }: { label: string; children: ReactNode; full?: boolean }) {
   return (
     <div className={full ? 'sm:col-span-2' : ''}>
-      <dt className="text-xs uppercase tracking-wide text-slate-500">{label}</dt>
-      <dd className="mt-1 text-slate-200">{children}</dd>
+      <dt className="text-[10px] uppercase tracking-widest text-[rgba(255,255,255,0.35)] mb-1">{label}</dt>
+      <dd className="text-[rgba(255,255,255,0.85)]">{children}</dd>
     </div>
   );
 }

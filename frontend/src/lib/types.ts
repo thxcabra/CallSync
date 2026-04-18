@@ -60,6 +60,33 @@ export interface Feedback {
   content: string;
 }
 
+export interface NotionPreviewItem {
+  id: string;
+  type: 'calendar' | 'task' | 'history_page';
+  label: string;
+  description: string;
+  synced_notion_id: string | null;
+}
+
+export interface NotionCallSync {
+  id: string;
+  call_id: string;
+  analysis_id: string | null;
+  synced_items: string[];
+  calendar_page_id: string | null;
+  history_page_id: string | null;
+  notion_page_ids: Record<string, string>;
+  author_name: string | null;
+  synced_at: string;
+}
+
+export interface NotionPreview {
+  call: Call;
+  analysis_id: string;
+  last_sync: NotionCallSync | null;
+  items: NotionPreviewItem[];
+}
+
 export interface CallAnalysis {
   id: string;
   call_id: string;

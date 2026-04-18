@@ -1,7 +1,88 @@
 @import "tailwindcss";
 
 @layer base {
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  :root {
+    --moic-bg: #080B21;
+    --moic-card: #0D1230;
+    --moic-elevated: #111840;
+    --moic-blue: #2A60FB;
+    --moic-blue-glow: rgba(42, 96, 251, 0.25);
+    --moic-blue-border: rgba(42, 96, 251, 0.35);
+    --moic-green: #00ED4F;
+    --moic-border: rgba(255, 255, 255, 0.07);
+    --moic-border-hover: rgba(255, 255, 255, 0.14);
+    --moic-text: #ffffff;
+    --moic-text-secondary: rgba(255, 255, 255, 0.55);
+    --moic-text-muted: rgba(255, 255, 255, 0.3);
+  }
+
+  html, body {
+    background-color: var(--moic-bg);
+    color: var(--moic-text);
+    font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 75% -10%, rgba(42,96,251,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 10% 90%, rgba(42,96,251,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Clash Grotesk', 'Sora', sans-serif;
+  }
+
+  ::selection {
+    background: rgba(42, 96, 251, 0.35);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(42, 96, 251, 0.4);
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  .moic-card {
+    background: var(--moic-card);
+    border: 1px solid var(--moic-border);
+    border-radius: 12px;
+  }
+
+  .moic-card:hover {
+    border-color: var(--moic-border-hover);
+  }
+
+  .moic-glow {
+    box-shadow: 0 0 20px var(--moic-blue-glow), 0 0 40px rgba(42, 96, 251, 0.1);
+  }
+
+  .moic-glow-sm {
+    box-shadow: 0 0 12px var(--moic-blue-glow);
+  }
+
+  .wave-line {
+    position: absolute;
+    opacity: 0.06;
+    pointer-events: none;
   }
 }
