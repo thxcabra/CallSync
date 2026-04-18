@@ -1,6 +1,6 @@
 # CallSync
 
-Ferramenta interna da **moic.digital** para documentar, analisar e sincronizar calls com clientes — do áudio ou transcrição até o Notion, em poucos cliques.
+Ferramenta interna da **Moic Digital** para documentar, analisar e sincronizar calls com clientes — do áudio ou transcrição até o Notion, em poucos cliques.
 
 ---
 
@@ -63,10 +63,6 @@ Cada projeto tem seu próprio espaço isolado no Notion (Kanban, Calendário de 
   - Página de histórico com resumo, anotações, feedback, tasks e transcrição completa
 - **Deduplicação por título**: antes de criar, arquiva entradas anteriores com o mesmo título
 - **Indicador de "já enviado"** no modal de revisão, com opção de reescrever
-
-### Equipe
-- Cadastro de membros ativos com nome, cargo e email
-- Seleção de autor em todas as ações (calls, análises, syncs) — validado contra os membros cadastrados
 
 ---
 
@@ -156,31 +152,14 @@ A partir daí, tudo é automático: na primeira sync de cada projeto, o CallSync
 ## Fluxo de uso
 
 ```
-1. Cadastrar membros da equipe
-2. Criar projeto (nome, cliente, equipe)
-3. Adicionar call (áudio ou transcrição)
-4. Transcrever → Analisar
-5. Revisar análise (resumo, tasks, feedback)
-6. Enviar para Notion (revisão opcional)
+1. Criar projeto (nome, cliente, equipe)
+2. Adicionar call (áudio ou transcrição)
+3. Transcrever → Analisar
+4. Revisar análise (resumo, tasks, feedback)
+5. Enviar para Notion (revisão opcional)
    └── Na primeira vez: cria Kanban + Calendário + Histórico no Notion
        e adiciona o link do projeto no CallSync
 ```
-
----
-
-## Endpoints principais
-
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/api/projects` | Lista projetos |
-| POST | `/api/projects` | Cria projeto |
-| PATCH | `/api/projects/:id` | Edita projeto |
-| GET | `/api/projects/:id/calls` | Lista calls |
-| POST | `/api/projects/:projectId/calls` | Cria call (com upload de áudio) |
-| POST | `/api/calls/:id/analyze` | Dispara análise por IA |
-| GET | `/api/calls/:id/notion-preview` | Preview dos itens para sync |
-| POST | `/api/calls/:id/sync-notion` | Sincroniza com Notion |
-| GET | `/api/team-members` | Lista membros |
 
 ---
 
@@ -198,7 +177,6 @@ Com pequenas adaptações, o CallSync pode ser usado em vendas:
 - Trocar "Projeto" por "Lead" e "Call" por "Reunião de prospecção"
 - Adicionar campos de funil (etapa, probabilidade de fechamento, valor estimado)
 - Análise de IA focada em: objeções identificadas, próximos passos, tom do prospect
-- Sync com CRM (Pipedrive, HubSpot) em vez de ou além do Notion
 - Dashboard de pipeline com sentimento acumulado por lead
 
 ### Automações e integrações adicionais
@@ -208,7 +186,6 @@ Com pequenas adaptações, o CallSync pode ser usado em vendas:
 - **Webhooks** — disparar ações externas em eventos (análise concluída, sync feito)
 
 ### Melhorias de produto
-- **Multi-tenancy** — suporte a múltiplas agências/times com isolamento de dados
 - **Autenticação real** — login com email/senha ou SSO (Supabase Auth já está na stack)
 - **Permissões por projeto** — membros só veem os projetos que participam
 - **Comentários e aprovação** — fluxo de revisão colaborativa das análises antes do sync
