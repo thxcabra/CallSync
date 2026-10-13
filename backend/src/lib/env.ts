@@ -14,10 +14,6 @@ const schema = z.object({
   SUPABASE_SECRET_KEY: z.string().min(1),
   NOTION_API_TOKEN: z.string().min(1),
   NOTION_ROOT_PAGE_ID: z.string().min(1),
-  // Optional overrides — skip auto-discovery when set
-  NOTION_CALENDAR_DB_ID: z.string().optional(),
-  NOTION_KANBAN_DB_ID: z.string().optional(),
-  NOTION_HISTORY_PAGE_ID: z.string().optional(),
   PORT: z.string().default('3002'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
