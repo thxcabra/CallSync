@@ -16,6 +16,16 @@ CallSync automates that loop:
 
 The UI is in Brazilian Portuguese.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/projects.png" alt="Projects list with each client's latest sentiment" width="32%" />
+  <img src="docs/screenshots/call.png" alt="A call with its participants and transcript" width="32%" />
+  <img src="docs/screenshots/analysis.png" alt="The AI analysis: summary, client sentiment, tasks and notes" width="32%" />
+</p>
+
+<sub>Local run with made-up sample data (fictional clients and calls).</sub>
+
 ## Features
 
 **Projects**
@@ -233,7 +243,7 @@ CallSync is a prototype meant to run locally or on an internal network. Read thi
 
 ## Author
 
-**João Cabral**: [GitHub](https://github.com/thxcabra) · [LinkedIn](https://www.linkedin.com/in/joao-cabral-machado/)
+**João Cabral**: [GitHub](https://github.com/thxcabra) · [LinkedIn](https://www.linkedin.com/in/joao-cabral-machado/) · [Portfolio](https://thxcabra.github.io/portfolio/#/projetos/5)
 
 ---
 
