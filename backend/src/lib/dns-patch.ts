@@ -1,7 +1,11 @@
 import dns from 'node:dns';
 
-// Veja memory/project_dns_supabase_workaround.md.
-// DNS local do usuário não resolve hostnames de projetos Supabase. Forçar resolver público.
+// Workaround for local DNS resolvers that hang on *.supabase.co hostnames.
+// dns.setServers() only affects dns.resolve*(), not dns.lookup(), which is what
+// fetch/undici (and therefore supabase-js) use. So we point the resolver at public
+// DNS and patch dns.lookup to resolve *.supabase.co via resolve4, falling back to
+// the system lookup on failure. All other hostnames go through the system lookup.
+// Safe to remove if your network resolves Supabase hosts normally.
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
 const originalLookup = dns.lookup;
