@@ -102,7 +102,7 @@ export function AuthorPicker({ open, forced, onClose }: AuthorPickerProps) {
                   {m.name}
                 </span>
                 <span className="text-xs text-[rgba(255,255,255,0.35)]">
-                  {roleLabels[m.role] ?? m.role}
+                  {(m.role && roleLabels[m.role]) ?? m.role}
                 </span>
               </button>
             ))}
