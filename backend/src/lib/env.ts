@@ -18,7 +18,7 @@ const schema = z.object({
   NOTION_CALENDAR_DB_ID: z.string().optional(),
   NOTION_KANBAN_DB_ID: z.string().optional(),
   NOTION_HISTORY_PAGE_ID: z.string().optional(),
-  PORT: z.string().default('3001'),
+  PORT: z.string().default('3002'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 
