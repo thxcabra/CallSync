@@ -10,12 +10,15 @@ node_modules/
 .env.test.local
 .env.production.local
 .env.*.local
+/env
 
 # Build output
 dist/
 build/
 .next/
 out/
+.vite/
+*.tsbuildinfo
 
 # Logs
 npm-debug.log*
@@ -25,9 +28,9 @@ pnpm-debug.log*
 *.log
 
 # Editor / OS
-.vscode/*
-!.vscode/extensions.json
+.vscode/
 .idea/
+.claude/
 .DS_Store
 Thumbs.db
 
