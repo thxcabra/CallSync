@@ -2,23 +2,23 @@
 
 @layer base {
   :root {
-    --moic-bg: #080B21;
-    --moic-card: #0D1230;
-    --moic-elevated: #111840;
-    --moic-blue: #2A60FB;
-    --moic-blue-glow: rgba(42, 96, 251, 0.25);
-    --moic-blue-border: rgba(42, 96, 251, 0.35);
-    --moic-green: #00ED4F;
-    --moic-border: rgba(255, 255, 255, 0.07);
-    --moic-border-hover: rgba(255, 255, 255, 0.14);
-    --moic-text: #ffffff;
-    --moic-text-secondary: rgba(255, 255, 255, 0.55);
-    --moic-text-muted: rgba(255, 255, 255, 0.3);
+    --app-bg: #080B21;
+    --app-card: #0D1230;
+    --app-elevated: #111840;
+    --app-blue: #2A60FB;
+    --app-blue-glow: rgba(42, 96, 251, 0.25);
+    --app-blue-border: rgba(42, 96, 251, 0.35);
+    --app-green: #00ED4F;
+    --app-border: rgba(255, 255, 255, 0.07);
+    --app-border-hover: rgba(255, 255, 255, 0.14);
+    --app-text: #ffffff;
+    --app-text-secondary: rgba(255, 255, 255, 0.55);
+    --app-text-muted: rgba(255, 255, 255, 0.3);
   }
 
   html, body {
-    background-color: var(--moic-bg);
-    color: var(--moic-text);
+    background-color: var(--app-bg);
+    color: var(--app-text);
     font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -62,22 +62,22 @@
 }
 
 @layer components {
-  .moic-card {
-    background: var(--moic-card);
-    border: 1px solid var(--moic-border);
+  .app-card {
+    background: var(--app-card);
+    border: 1px solid var(--app-border);
     border-radius: 12px;
   }
 
-  .moic-card:hover {
-    border-color: var(--moic-border-hover);
+  .app-card:hover {
+    border-color: var(--app-border-hover);
   }
 
-  .moic-glow {
-    box-shadow: 0 0 20px var(--moic-blue-glow), 0 0 40px rgba(42, 96, 251, 0.1);
+  .app-glow {
+    box-shadow: 0 0 20px var(--app-blue-glow), 0 0 40px rgba(42, 96, 251, 0.1);
   }
 
-  .moic-glow-sm {
-    box-shadow: 0 0 12px var(--moic-blue-glow);
+  .app-glow-sm {
+    box-shadow: 0 0 12px var(--app-blue-glow);
   }
 
   .wave-line {

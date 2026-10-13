@@ -95,7 +95,7 @@ function buildPrompt(args: {
     .map((p: any) => `- ${p.name}${p.role ? ` (${p.role})` : ''}`)
     .join('\n') || '(não informado)';
 
-  return `Você é um analista sênior de marketing digital ajudando a moic.digital a documentar e extrair insights de calls com clientes.
+  return `Você é um analista sênior de marketing digital ajudando uma agência a documentar e extrair insights de calls com clientes.
 
 # Contexto do projeto
 **Cliente:** ${project.client_name}

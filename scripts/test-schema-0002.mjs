@@ -40,16 +40,14 @@ async function step(label, fn) {
 }
 
 try {
-  const members = await step('team_members tem 5 linhas com roles corretos', async () => {
+  const members = await step('team_members tem 3 linhas com roles corretos', async () => {
     const { data, error } = await admin.from('team_members').select('name, role, active').order('name');
     if (error) throw error;
-    if (data.length !== 5) throw new Error(`esperado 5, veio ${data.length}`);
+    if (data.length !== 3) throw new Error(`esperado 3, veio ${data.length}`);
     const expected = {
       'Ana': 'manager',
-      'Cabral': 'analista',
-      'Carla': 'manager',
       'Bruno': 'analista',
-      'Diego': 'CEO',
+      'Carla': 'analista',
     };
     for (const m of data) {
       if (expected[m.name] !== m.role) throw new Error(`${m.name} esperado role ${expected[m.name]}, veio ${m.role}`);
@@ -60,7 +58,7 @@ try {
   console.log(`   ${members.map(m => `${m.name} (${m.role})`).join(', ')}`);
 
   await step('UNIQUE em team_members.name bloqueia duplicata', async () => {
-    const { error } = await admin.from('team_members').insert({ name: 'Cabral' });
+    const { error } = await admin.from('team_members').insert({ name: 'Bruno' });
     if (!error) throw new Error('era pra falhar');
     if (error.code !== '23505') throw new Error(`erro errado: ${error.message}`);
   });
@@ -69,10 +67,10 @@ try {
     const { data, error } = await admin.from('projects').insert({
       name: '__smoke_0002__',
       client_name: 'Cliente',
-      author_name: 'Cabral',
+      author_name: 'Bruno',
     }).select().single();
     if (error) throw error;
-    if (data.author_name !== 'Cabral') throw new Error('author_name não persistiu');
+    if (data.author_name !== 'Bruno') throw new Error('author_name não persistiu');
     return data;
   });
   projectId = project.id;
@@ -83,10 +81,10 @@ try {
       call_date: new Date().toISOString(),
       transcript_source: 'manual',
       transcript: 'fake',
-      author_name: 'Bruno',
+      author_name: 'Carla',
     }).select().single();
     if (error) throw error;
-    if (data.author_name !== 'Bruno') throw new Error('author_name não persistiu');
+    if (data.author_name !== 'Carla') throw new Error('author_name não persistiu');
 
     const { data: analysis, error: aErr } = await admin.from('call_analyses').insert({
       call_id: data.id,

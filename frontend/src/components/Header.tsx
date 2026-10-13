@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { useAuthor } from '../lib/author';
 import { AuthorPicker } from './AuthorPicker';
 
-function MoicMark({ className = '' }: { className?: string }) {
+function LogoMark({ className = '' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 305 183" fill="currentColor" className={className} aria-hidden>
-      <path d="M123.2,150.6v-71.4c0-9.8-11.8-14.7-18.8-7.8L12.3,163.5c-6.9,6.9-2,18.8,7.8,18.8h272.7c6.1,0,11.1-5,11.1-11.1V23.2c0-9.9-11.9-14.8-18.9-7.8l-143,143c-6.9,6.9-18.8,2-18.8-7.8Z" />
+    <svg viewBox="0 0 32 20" fill="currentColor" className={className} aria-hidden>
+      <rect x="2" y="7" width="4" height="6" rx="2" />
+      <rect x="10" y="3" width="4" height="14" rx="2" />
+      <rect x="18" y="0" width="4" height="20" rx="2" />
+      <rect x="26" y="5" width="4" height="10" rx="2" />
     </svg>
   );
 }
@@ -23,7 +26,7 @@ export function Header() {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <MoicMark className="h-5 w-8 text-[#2A60FB] transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(42,96,251,0.8)]" />
+            <LogoMark className="h-5 w-8 text-[#2A60FB] transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(42,96,251,0.8)]" />
             <div className="flex flex-col leading-none">
               <span
                 className="text-base font-semibold tracking-tight text-white"
@@ -32,7 +35,7 @@ export function Header() {
                 CallSync
               </span>
               <span className="text-[10px] text-[rgba(255,255,255,0.35)] tracking-wider uppercase" style={{ fontFamily: "'Sora', sans-serif" }}>
-                by moic.digital
+                calls → Notion
               </span>
             </div>
           </Link>

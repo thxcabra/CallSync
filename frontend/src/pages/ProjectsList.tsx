@@ -167,7 +167,7 @@ export function ProjectsList() {
             className="text-xs uppercase tracking-widest text-[rgba(255,255,255,0.3)] mb-1"
             style={{ fontFamily: "'Sora', sans-serif" }}
           >
-            moic.digital
+            CallSync
           </p>
           <h1
             className="text-3xl font-semibold text-white"

@@ -1,8 +1,8 @@
-// Smoke test do backend: assume servidor já rodando em http://localhost:3001
+// Smoke test do backend: assume servidor já rodando em http://localhost:3002
 // Cobre o fluxo: criar projeto → criar call manual → analisar com Gemini → cleanup.
 
 const BASE = 'http://localhost:3002';
-const AUTHOR = 'Cabral';
+const AUTHOR = 'Bruno';
 
 let projectId, callId;
 
@@ -47,7 +47,7 @@ try {
 
   const members = await step('GET /api/team-members', async () => {
     const r = await api('GET', '/api/team-members', { headers: {} });
-    if (r.members.length !== 5) throw new Error(`esperado 5 membros, veio ${r.members.length}`);
+    if (!r.members.some((m) => m.name === AUTHOR)) throw new Error(`${AUTHOR} não está em team_members ativos`);
     return r.members;
   });
   console.log(`   ${members.map(m => m.name).join(', ')}`);
@@ -77,7 +77,7 @@ try {
         client_name: 'Acme SaaS',
         description: 'Cliente B2B SaaS de gestão financeira para PMEs.',
         planned_posts_count: 16,
-        team: { manager: 'Ana', analysts: ['Cabral', 'Bruno'], strategists: ['Carla'] },
+        team: { manager: 'Ana', analysts: ['Bruno', 'Carla'], strategists: ['Diego'] },
         contacts: [{ name: 'Maria CEO', email: 'maria@acme.com', role: 'CEO' }],
         reference_links: [{ label: 'Site', url: 'https://acme.example' }],
         status: 'active',
@@ -107,22 +107,22 @@ try {
         title: 'Kickoff Acme',
         call_date: new Date().toISOString(),
         participants: [
-          { name: 'Cabral', role: 'Analista' },
+          { name: 'Bruno', role: 'Analista' },
           { name: 'Maria CEO', role: 'CEO Cliente' },
         ],
-        transcript: `[Falante A — Cabral]: Bom dia Maria, vamos revisar o briefing inicial e alinhar expectativas?
+        transcript: `[Falante A — Bruno]: Bom dia Maria, vamos revisar o briefing inicial e alinhar expectativas?
 
 [Falante B — Maria]: Bom dia! Pode mandar. Estou animada com os primeiros posts que vocês mandaram, especialmente o reel sobre fluxo de caixa — teve ótimo engajamento.
 
-[Falante A — Cabral]: Que bom! Esse reel performou 3x acima da média. Para a próxima quinzena, sugerimos 8 posts: 3 reels educativos sobre conciliação bancária, 2 carrosséis de cases, e 3 stories interativos.
+[Falante A — Bruno]: Que bom! Esse reel performou 3x acima da média. Para a próxima quinzena, sugerimos 8 posts: 3 reels educativos sobre conciliação bancária, 2 carrosséis de cases, e 3 stories interativos.
 
 [Falante B — Maria]: Gostei. Mas preciso que vocês tenham mais agilidade nas aprovações — está demorando 4 dias e perdemos timing. Pode ser 48h?
 
-[Falante A — Cabral]: Concordo. Vou alinhar internamente e te mando um cronograma novo até sexta com SLA de 48h.
+[Falante A — Bruno]: Concordo. Vou alinhar internamente e te mando um cronograma novo até sexta com SLA de 48h.
 
 [Falante B — Maria]: Perfeito. Outra coisa: o time de vendas pediu pra termos um CTA mais forte nos posts. Pode incorporar?
 
-[Falante A — Cabral]: Anotado. Vou passar pro Ana, ele tá liderando esse projeto pelo nosso lado.`,
+[Falante A — Bruno]: Anotado. Vou passar pra Ana, ela tá liderando esse projeto pelo nosso lado.`,
       },
     });
     if (r.call.transcript_status !== 'transcribed') throw new Error(`status esperado transcribed`);

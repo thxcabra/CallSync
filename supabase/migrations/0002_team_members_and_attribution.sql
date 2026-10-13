@@ -24,13 +24,11 @@ alter table public.team_members enable row level security;
 create policy "auth users full access" on public.team_members
   for all to authenticated using (true) with check (true);
 
--- Pré-popular com a equipe atual da moic.digital
+-- Membros de exemplo (substitua pela sua equipe)
 insert into public.team_members (name, role) values
-  ('Cabral',   'analista'),
-  ('Bruno',       'analista'),
-  ('Ana',     'manager'),
-  ('Carla', 'manager'),
-  ('Diego',  'CEO');
+  ('Ana',   'manager'),
+  ('Bruno', 'analista'),
+  ('Carla', 'analista');
 
 -- ----------------------------------------------------------------
 -- author_name em registros existentes

@@ -173,10 +173,10 @@ export function ProjectForm({
             <Input value={form.team_manager} onChange={(e) => update('team_manager', e.target.value)} placeholder="Ana" />
           </Field>
           <Field label="Analistas" hint="Separados por vírgula">
-            <Input value={form.team_analysts} onChange={(e) => update('team_analysts', e.target.value)} placeholder="Cabral, Bruno" />
+            <Input value={form.team_analysts} onChange={(e) => update('team_analysts', e.target.value)} placeholder="Bruno, Carla" />
           </Field>
           <Field label="Estrategistas" hint="Separados por vírgula">
-            <Input value={form.team_strategists} onChange={(e) => update('team_strategists', e.target.value)} placeholder="Carla" />
+            <Input value={form.team_strategists} onChange={(e) => update('team_strategists', e.target.value)} placeholder="Diego" />
           </Field>
         </div>
       </Card>
